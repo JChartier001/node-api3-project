@@ -6,7 +6,7 @@ const posts = require('./postDb.js');
 router.use(express.json());
 
 
-router.get('/', (req, res) => {
+router.get('/posts', (req, res) => {
   // do your magic!
   posts.get(req.query)
     .then(posts => {
@@ -18,28 +18,22 @@ router.get('/', (req, res) => {
   
 });
 
-router.get('/:id', validatePostId, (req, res) => {
+  router.get('/posts/:id', validatePostId, (req, res) => {
   // do your magic!
   const { id } = req.params;
   posts.getById(id)
     .then(post => {
-      if (post.length) {
-        posts.findPostComments(id)
-          .then(comments => {
-              res.status(200).json(comments);
-          })
-          .catch(error => {
-              console.log(error);
-          })
-      } else {
-          res.status(404).json({error: 'The post with the specified ID does not exist.'})
-      }})
+      console.log(post)
+      res.status(200).json(post);
+      })
     .catch(error => {
-        res.status(500).json({error: 'The comments information could not be retrieved'})
-    })      
+       console.log(error);
+       res.status(500).json({error: 'The comments information could not be retrieved'})
+          })
+       
 });
 
-router.delete('/:id', validatePostId, (req, res) => {
+router.delete('/posts/:id', validatePostId, (req, res) => {
   // do your magic!
   const { id } = req.params;
   console.log(id)  
@@ -54,10 +48,7 @@ router.delete('/:id', validatePostId, (req, res) => {
       })
 });
 
-router.put('/:id', 
-validatePostId, 
-validatePost, 
-(req, res) => {
+router.put('/posts/:id', validatePostId, validatePost, (req, res) => {
   // do your magic!
   const { id } = req.params;
   const changes = req.body;

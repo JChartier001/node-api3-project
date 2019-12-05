@@ -9,7 +9,8 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 server.use(logger);
-server.use('/api/posts', postRouter);
+server.use('/api', postRouter);
+server.use('/api/users', userRouter)
 
 
 server.get('/', (req, res) => {
@@ -22,16 +23,7 @@ function logger(req, res, next) {
   next(); 
 }
 
-function validateUserId(id){
-  return function(req, res, next){
-    if(id && id === users.getById(id)){
-      res.send(req.user);
-      next();
-    } else {
-      res.status(400).json({message: "invalid user id"})
-    }
-  }
-}
+
 
 function validateUser(body){
   return function(req,res,next){
@@ -47,19 +39,7 @@ function validateUser(body){
   }
 }
 
-// function validatePost(body){
-//   return function(req,res,next){
-//     const body = req.body;
-//     const text = req.params.text;
-//     if(!body){
-//       res.status(400).json({message: "missing post data"})
-//     } else if(!text){
-//       res.status(400).json({message: 'missing required text field'})
-//     } else {
-//       next();
-//     }
-//   }
-// }
+
 
 
 
